@@ -1451,11 +1451,12 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       })
-      .catch(() => {}) // still show success even if network hiccup
+      .catch(() => {})
       .finally(() => {
         window.open('https://crm.syntraplatform.io/widget/bookings/bludata-sales-team-rr', '_blank');
         document.getElementById('contactForm').style.display = 'none';
         document.getElementById('formSuccess').style.display = 'block';
+      });
     }
 
     // Nav scroll effect
