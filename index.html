@@ -1400,6 +1400,10 @@
 
   <!-- ======================== SCRIPTS ======================== -->
   <script>
+    // Always start at top on page load
+    history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+
     // Scroll animations
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
