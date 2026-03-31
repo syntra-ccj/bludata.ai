@@ -789,6 +789,9 @@
     }
     .form-submit:hover { background: var(--blue-bright); box-shadow: 0 0 32px var(--blue-glow); transform: translateY(-1px); }
     .form-note { font-size: 12px; color: var(--gray); text-align: center; margin-top: 12px; }
+    .req { color: var(--blue); font-weight: 700; }
+    .field-error { border-color: #ff4d4d !important; box-shadow: 0 0 0 3px rgba(255,77,77,0.15) !important; }
+    .field-error:focus { border-color: #ff4d4d !important; }
     .form-success {
       display: none;
       text-align: center;
@@ -1313,27 +1316,28 @@
         <div class="contact-form-box fade-up">
           <div id="contactForm">
             <h3>Send Us a Message</h3>
+            <form id="leadForm" onsubmit="submitForm(event)" novalidate>
             <div class="form-row">
               <div class="form-group">
-                <label>First Name</label>
-                <input id="f_first_name" type="text" placeholder="John" />
+                <label>First Name <span class="req">*</span></label>
+                <input id="f_first_name" type="text" placeholder="John" required />
               </div>
               <div class="form-group">
-                <label>Last Name</label>
-                <input id="f_last_name" type="text" placeholder="Smith" />
+                <label>Last Name <span class="req">*</span></label>
+                <input id="f_last_name" type="text" placeholder="Smith" required />
               </div>
             </div>
             <div class="form-group">
-              <label>Business Name</label>
-              <input id="f_business" type="text" placeholder="Your Company" />
+              <label>Business Name <span class="req">*</span></label>
+              <input id="f_business" type="text" placeholder="Your Company" required />
             </div>
             <div class="form-group">
-              <label>Phone Number</label>
-              <input id="f_phone" type="tel" placeholder="+1 (555) 000-0000" />
+              <label>Phone Number <span class="req">*</span></label>
+              <input id="f_phone" type="tel" placeholder="+1 (555) 000-0000" required />
             </div>
             <div class="form-group">
-              <label>What Are You Looking For?</label>
-              <select id="f_service">
+              <label>What Are You Looking For? <span class="req">*</span></label>
+              <select id="f_service" required>
                 <option value="" disabled selected>Select a service...</option>
                 <option>Workflow & CRM Automation</option>
                 <option>AI Voice Agents</option>
@@ -1346,8 +1350,9 @@
               <label>Tell Us About Your Business</label>
               <textarea id="f_message" placeholder="What does your business do? What's your biggest challenge right now?"></textarea>
             </div>
-            <button class="form-submit" onclick="submitForm()">Book My Free Strategy Call &rarr;</button>
+            <button type="submit" class="form-submit">Book My Free Strategy Call &rarr;</button>
             <p class="form-note">No spam. No pressure. Just a real conversation about your growth.</p>
+            </form>
           </div>
           <div class="form-success" id="formSuccess">
             <div class="success-icon">✅</div>
@@ -1435,7 +1440,14 @@
     }
 
     // Contact form submit
-    function submitForm() {
+    function submitForm(e) {
+      e.preventDefault();
+      const form = document.getElementById('leadForm');
+      if (!form.checkValidity()) {
+        form.querySelectorAll(':invalid').forEach(el => el.classList.add('field-error'));
+        return;
+      }
+      form.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
       const btn = document.querySelector('.form-submit');
       btn.textContent = 'Sending...';
       btn.disabled = true;
