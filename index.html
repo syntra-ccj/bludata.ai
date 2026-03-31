@@ -1330,24 +1330,24 @@
             <div class="form-row">
               <div class="form-group">
                 <label>First Name</label>
-                <input type="text" placeholder="John" />
+                <input id="f_first_name" type="text" placeholder="John" />
               </div>
               <div class="form-group">
                 <label>Last Name</label>
-                <input type="text" placeholder="Smith" />
+                <input id="f_last_name" type="text" placeholder="Smith" />
               </div>
             </div>
             <div class="form-group">
               <label>Business Name</label>
-              <input type="text" placeholder="Your Company" />
+              <input id="f_business" type="text" placeholder="Your Company" />
             </div>
             <div class="form-group">
               <label>Phone Number</label>
-              <input type="tel" placeholder="+1 (555) 000-0000" />
+              <input id="f_phone" type="tel" placeholder="+1 (555) 000-0000" />
             </div>
             <div class="form-group">
               <label>What Are You Looking For?</label>
-              <select>
+              <select id="f_service">
                 <option value="" disabled selected>Select a service...</option>
                 <option>Workflow & CRM Automation</option>
                 <option>AI Voice Agents</option>
@@ -1358,7 +1358,7 @@
             </div>
             <div class="form-group">
               <label>Tell Us About Your Business</label>
-              <textarea placeholder="What does your business do? What's your biggest challenge right now?"></textarea>
+              <textarea id="f_message" placeholder="What does your business do? What's your biggest challenge right now?"></textarea>
             </div>
             <button class="form-submit" onclick="submitForm()">Book My Free Strategy Call &rarr;</button>
             <p class="form-note">No spam. No pressure. Just a real conversation about your growth.</p>
@@ -1460,9 +1460,30 @@
 
     // Contact form submit
     function submitForm() {
-      window.open('https://crm.syntraplatform.io/widget/bookings/bludata-sales-team-rr', '_blank');
-      document.getElementById('contactForm').style.display = 'none';
-      document.getElementById('formSuccess').style.display = 'block';
+      const btn = document.querySelector('.form-submit');
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      const payload = {
+        first_name:    document.getElementById('f_first_name').value,
+        last_name:     document.getElementById('f_last_name').value,
+        business_name: document.getElementById('f_business').value,
+        phone:         document.getElementById('f_phone').value,
+        service:       document.getElementById('f_service').value,
+        message:       document.getElementById('f_message').value,
+        source:        'bludata.ai website'
+      };
+
+      fetch('https://services.leadconnectorhq.com/hooks/JVMDARskKgAMF8H18kG2/webhook-trigger/UFVY6wZvZdTwUtX2k2Hi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .catch(() => {}) // still show success even if network hiccup
+      .finally(() => {
+        window.open('https://crm.syntraplatform.io/widget/bookings/bludata-sales-team-rr', '_blank');
+        document.getElementById('contactForm').style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
     }
 
     // Nav scroll effect
